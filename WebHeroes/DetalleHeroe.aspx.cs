@@ -14,6 +14,7 @@ namespace WebHeroes
         public string Imagen { get; set; }
         public bool botonBorrar  { get; set; }
         public bool activarBorrado { get; set; }
+        public bool estadoHeroe { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             txtId.Enabled = false;
@@ -28,8 +29,12 @@ namespace WebHeroes
                 SuperHeroe unHeroe = new SuperHeroe();
                 unHeroe = daoSuperHeroes.unSuperHeroe(int.Parse(txtId.Text));
 
+                estadoHeroe = unHeroe.Estado;
+
                 if (!IsPostBack)
                 {
+
+
                     txtCodigo.Text = unHeroe.Codigo;
                     txtNombre.Text = unHeroe.Nombre;
                     txtUrl.Text = unHeroe.UrlImagen;
@@ -39,6 +44,9 @@ namespace WebHeroes
                     txtFuerza.Text = unHeroe.Fuerza.ToString();
                     txtVelocidad.Text = unHeroe.Velocidad.ToString();
                     txtPeleasGanadas.Text = unHeroe.PeleasGanadas.ToString();
+
+                    
+                    estadoHeroe = unHeroe.Estado;
 
                 }
 
@@ -81,6 +89,8 @@ namespace WebHeroes
                 aux.PeleasGanadas = int.Parse(txtPeleasGanadas.Text);
                 aux.Velocidad = int.Parse(txtVelocidad.Text);
                 aux.UrlImagen = txtUrl.Text;
+
+                aux.Estado = estadoHeroe;
 
                 dao.SP_modificarHeroe(aux);
 

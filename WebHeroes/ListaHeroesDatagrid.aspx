@@ -29,10 +29,10 @@
                 <div class="row" style="background-color:cornsilk; border-radius:3%">
                     <div class ="col-3">
                         <div = "mb-3">
-                            <asp:Label Text="Campo:" ID="ddlCampo" runat="server" />
-                            <asp:DropDownList runat="server" CssClass="form-control">
+                            <asp:Label Text="Campo:" ID="lblCampo" runat="server" />
+                            <asp:DropDownList runat="server" CssClass="form-control" ID="ddl_Campo"
+                                OnSelectedIndexChanged="ddl_Campo_SelectedIndexChanged" AutoPostBack="true" >
                                 <asp:ListItem Text="Nombre" />
-                                <asp:ListItem Text="Tipo" />
                                 <asp:ListItem Text="Número" />
                             </asp:DropDownList>
 
@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class ="col-3">
                             <div class="mb-3">
-                                <asp:Button Text="Buscar" runat="server" CssClass="btn btn-primary"  ID="btnBuscar"/>
+                                <asp:Button Text="Buscar" runat="server" CssClass="btn btn-primary"  ID="btnBuscar" OnClick="btnBuscar_Click"/>
                             </div>
                         </div>
                     </div>
@@ -76,6 +76,7 @@
         CssClass="table" DataKeyNames="Id" OnSelectedIndexChanged="dgvHeroes_SelectedIndexChanged"
         OnPageIndexChanging="dgvHeroes_PageIndexChanging" AllowPaging="true" PageSize="4">
         <Columns >
+            <asp:BoundField HeaderText="Id" DataField="Id" />
             <asp:BoundField HeaderText="Codigo" DataField="Codigo" />
             <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
             <asp:BoundField HeaderText="Peleas Ganadas" DataField="PeleasGanadas" />

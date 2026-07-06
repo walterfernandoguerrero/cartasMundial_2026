@@ -42,6 +42,8 @@ namespace Negocio
                     sphAux.Velocidad = Convert.ToInt32(lector["velocidad"]);
                     sphAux.UrlImagen = lector["url_imagen"].ToString();
 
+                    sphAux.Estado = Convert.ToBoolean(lector["estado"].ToString());
+
                     lista.Add(sphAux);
                 }
                 lector.Close();
@@ -81,6 +83,8 @@ namespace Negocio
                     sphAux.PeleasGanadas = Convert.ToInt32(lector["peleas_ganadas"]);
                     sphAux.Velocidad = Convert.ToInt32(lector["velocidad"]);
                     sphAux.UrlImagen = lector["url_imagen"].ToString();
+                    
+                    sphAux.Estado = Convert.ToBoolean(lector["estado"].ToString());
 
                     lista.Add(sphAux);
                 }
@@ -120,6 +124,9 @@ namespace Negocio
                 cmd.Parameters.AddWithValue("@velocidad", heroe.Velocidad);
                 cmd.Parameters.AddWithValue("@url_imagen", heroe.UrlImagen);
 
+                cmd.Parameters.AddWithValue("@estado", true);
+
+
 
                 cmd.ExecuteNonQuery();
             }
@@ -157,6 +164,8 @@ namespace Negocio
                     sphAux.Velocidad = Convert.ToInt32(lector["velocidad"]);
                     sphAux.UrlImagen = lector["url_imagen"].ToString();
 
+                    sphAux.Estado = Convert.ToBoolean(lector["estado"].ToString());
+
                     lista.Add(sphAux);
                 }
                 lector.Close();
@@ -174,9 +183,7 @@ namespace Negocio
             {
                 con.cerrarBD(con.abrirBD());
             }
-            
         } 
-
         public void SP_modificarHeroe(SuperHeroe heroe)
         {
             Conexion con = new Conexion();
@@ -196,6 +203,9 @@ namespace Negocio
                 cmd.Parameters.AddWithValue("@peleas_ganadas", heroe.PeleasGanadas);
                 cmd.Parameters.AddWithValue("@velocidad", heroe.Velocidad);
                 cmd.Parameters.AddWithValue("@url_imagen", heroe.UrlImagen);
+
+                cmd.Parameters.AddWithValue("@estado", heroe.Estado);
+
                 cmd.Parameters.AddWithValue("@id", heroe.Id);
 
 
@@ -235,6 +245,100 @@ namespace Negocio
             {
                 con.cerrarBD(con.abrirBD());
             }
+        }
+
+        public List<SuperHeroe> ListaFiltrada(string campo, string criterio, string filtro, string estado)
+        {
+            SuperHeroe heroe = new SuperHeroe();
+            List<SuperHeroe> lista = new List<SuperHeroe>();
+            Conexion con = new Conexion();
+
+            try
+            {
+                string query = $"select * from super_heroes where ";
+                
+                if(campo== "Número")
+                {
+                    switch (criterio)
+                    {
+                        case "Menor que":
+                            query += $"id < {filtro}";
+                            break;
+                        case "Igual a":
+                            query += $"id = {filtro}";
+                            break;
+                        case "Mayor que":
+                            query += $"id > {filtro}";
+                            break;
+                       default:
+                            break;
+                    }
+                }
+                else
+                {
+                    if (campo == "Nombre")
+                    {
+                        switch(criterio)
+                        {
+
+                            case "Comienza con":
+                                query += $"nombre like '{filtro}%'";
+                                break;
+                            case "Termina con":
+                                query += $"nombre like '%{filtro}'";
+                                break;
+                            case "Contiene":
+                                query += $"nombre like '%{filtro}%'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                    
+                if(estado == "Activo")
+                {
+                    query += $" and estado = 1";
+                }
+                else
+                {
+                    if(estado == "Inactivo" )
+                        query += $" and estado = 0";
+                }
+
+                SqlCommand comando = new SqlCommand(query, con.abrirBD());
+                SqlDataReader lector = comando.ExecuteReader();
+                while (lector.Read())
+                {
+                    SuperHeroe sphAux = new SuperHeroe();
+                    sphAux.Id = Convert.ToInt32(lector["id"]);
+                    sphAux.Codigo = lector["codigo"].ToString();
+                    sphAux.Nombre = lector["nombre"].ToString();
+                    sphAux.Altura = Convert.ToDecimal(lector["altura"]);
+                    sphAux.Peso = Convert.ToInt32(lector["peso"]);
+                    sphAux.Fuerza = Convert.ToInt32(lector["fuerza"]);
+                    sphAux.PeleasGanadas = Convert.ToInt32(lector["peleas_ganadas"]);
+                    sphAux.Velocidad = Convert.ToInt32(lector["velocidad"]);
+                    sphAux.UrlImagen = lector["url_imagen"].ToString();
+
+                    sphAux.Estado = Convert.ToBoolean(lector["estado"].ToString());
+
+                    lista.Add(sphAux);
+                }
+                lector.Close();
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                con.cerrarBD(con.abrirBD());
+            }
+            
+
         }
     }
 }

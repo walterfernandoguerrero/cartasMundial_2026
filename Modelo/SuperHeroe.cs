@@ -17,6 +17,7 @@ namespace Modelo
         public int PeleasGanadas { get; set; }
         public int Velocidad { get; set; }
         public string UrlImagen { get; set; }
-
+        public bool  Estado { get; set; }
+        
     }
 }
